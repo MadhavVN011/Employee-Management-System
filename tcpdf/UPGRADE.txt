@@ -1,0 +1,6 @@
+TCPDF engine: 6.11.4
+Upstream: https://github.com/tecnickcom/TCPDF/tree/fbbaf14cfae8fe646f154f7c530d15ec25764040
+Archive SHA-256: 8ef8f3a29d46434dafe43d1850cdf40aa6e74a3029565da51e3428c95cb48108
+
+Root PHP engine files and include/ are from this release.
+The existing project fonts and config/ are preserved.

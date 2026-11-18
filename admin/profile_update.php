@@ -1,54 +1,41 @@
 <?php
-	include 'includes/session.php';
-
-	if(isset($_GET['return'])){
-		$return = $_GET['return'];
-		
-	}
-	else{
-		$return = 'home.php';
-	}
-
-	if(isset($_POST['save'])){
-		$curr_password = $_POST['curr_password'];
-		$username = $_POST['username'];
-		$password = $_POST['password'];
-		$firstname = $_POST['firstname'];
-		$lastname = $_POST['lastname'];
-		$photo = $_FILES['photo']['name'];
-		if(password_verify($curr_password, $user['password'])){
-			if(!empty($photo)){
-				move_uploaded_file($_FILES['photo']['tmp_name'], '../images/'.$photo);
-				$filename = $photo;	
-			}
-			else{
-				$filename = $user['photo'];
-			}
-
-			if($password == $user['password']){
-				$password = $user['password'];
-			}
-			else{
-				$password = password_hash($password, PASSWORD_DEFAULT);
-			}
-
-			$sql = "UPDATE admin SET username = '$username', password = '$password', firstname = '$firstname', lastname = '$lastname', photo = '$filename' WHERE id = '".$user['id']."'";
-			if($conn->query($sql)){
-				$_SESSION['success'] = 'Admin profile updated successfully';
-			}
-			else{
-				$_SESSION['error'] = $conn->error;
-			}
-			
-		}
-		else{
-			$_SESSION['error'] = 'Incorrect password';
-		}
-	}
-	else{
-		$_SESSION['error'] = 'Fill up required details first';
-	}
-
-	header('location:'.$return);
-
-?>
+require 'includes/session.php';
+require_once __DIR__.'/includes/photo.php';
+$pages = array('home.php', 'employee.php', 'attendance.php', 'overtime.php', 'cashadvance.php',
+    'schedule.php', 'position.php', 'deduction.php', 'schedule_employee.php', 'payroll.php');
+$return = $_GET['return'] ?? 'home.php';
+if (!is_string($return) || !in_array($return, $pages, true)) {
+    $return = 'home.php';
+}
+$filename = null;
+try {
+    if (!isset($_POST['save'])) {
+        throw new InvalidArgumentException('Fill up required details first');
+    }
+    foreach (array('curr_password', 'username', 'firstname', 'lastname') as $field) {
+        if (!isset($_POST[$field]) || !is_string($_POST[$field]) || trim($_POST[$field]) === '') {
+            throw new InvalidArgumentException('Fill up required details first');
+        }
+    }
+    if (!password_verify($_POST['curr_password'], $user['password'])) {
+        throw new InvalidArgumentException('Incorrect password');
+    }
+    $password = $_POST['password'] ?? '';
+    if (!is_string($password) || strpos($password, "\0") !== false || ($password !== '' && trim($password) === '')) {
+        throw new InvalidArgumentException('Enter a valid new password or leave it blank.');
+    }
+    $hash = $password === '' ? $user['password'] : password_hash($password, PASSWORD_DEFAULT);
+    $filename = store_photo($_FILES['photo'] ?? null);
+    db_query($conn, 'UPDATE admin SET username = ?, password = ?, firstname = ?, lastname = ?, photo = ? WHERE id = ?',
+        array(trim($_POST['username']), $hash, $_POST['firstname'], $_POST['lastname'], $filename ?? $user['photo'], $user['id']));
+    $_SESSION['success'] = 'Admin profile updated successfully';
+} catch (InvalidArgumentException $error) {
+    discard_photo($filename);
+    $_SESSION['error'] = $error->getMessage();
+} catch (mysqli_sql_exception $error) {
+    discard_photo($filename);
+    error_log($error->getMessage());
+    $_SESSION['error'] = 'Unable to update the profile. Please check the details.';
+}
+header('Location: '.$return);
+exit;

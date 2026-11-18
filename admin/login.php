@@ -6,8 +6,8 @@
 		$username = $_POST['username'];
 		$password = $_POST['password'];
 
-		$sql = "SELECT * FROM admin WHERE username = '$username'";
-		$query = $conn->query($sql);
+		$sql = 'SELECT * FROM admin WHERE username = ?';
+		$query = db_query($conn, $sql, array($username));
 
 		if($query->num_rows < 1){
 			$_SESSION['error'] = 'Cannot find account with the username';
@@ -15,6 +15,7 @@
 		else{
 			$row = $query->fetch_assoc();
 			if(password_verify($password, $row['password'])){
+				session_regenerate_id(true);
 				$_SESSION['admin'] = $row['id'];
 			}
 			else{

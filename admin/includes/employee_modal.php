@@ -68,7 +68,7 @@
                           $query = $conn->query($sql);
                           while($prow = $query->fetch_assoc()){
                             echo "
-                              <option value='".$prow['id']."'>".$prow['description']."</option>
+                              <option value='".$prow['id']."'>".h($prow['description'])."</option>
                             ";
                           }
                         ?>
@@ -181,7 +181,7 @@
                           $query = $conn->query($sql);
                           while($prow = $query->fetch_assoc()){
                             echo "
-                              <option value='".$prow['id']."'>".$prow['description']."</option>
+                              <option value='".$prow['id']."'>".h($prow['description'])."</option>
                             ";
                           }
                         ?>
@@ -258,7 +258,7 @@
                     <label for="photo" class="col-sm-3 control-label">Photo</label>
 
                     <div class="col-sm-9">
-                      <input type="file" id="photo" name="photo" required>
+                      <input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/gif,image/webp" required>
                     </div>
                 </div>
             </div>

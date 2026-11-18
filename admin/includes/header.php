@@ -1,11 +1,16 @@
+<?php
+require_once __DIR__.'/../../helpers.php';
+$ems_page_titles = array('home.php' => 'Overview', 'employee.php' => 'Employees', 'attendance.php' => 'Attendance', 'overtime.php' => 'Overtime', 'cashadvance.php' => 'Cash advances', 'schedule.php' => 'Work schedules', 'position.php' => 'Positions', 'deduction.php' => 'Deductions', 'schedule_employee.php' => 'Team schedules', 'payroll.php' => 'Payroll');
+$ems_page_title = $ems_page_titles[basename($_SERVER['SCRIPT_NAME'])] ?? 'Admin sign in';
+?>
 <!DOCTYPE html>
 <html>
 <head>
   	<meta charset="utf-8">
   	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  	<title>Company - EMS | Admin</title>
+    <title><?php echo h($ems_page_title); ?> · EMS</title>
   	<!-- Tell the browser to be responsive to screen width -->
-  	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
   	<!-- Bootstrap 3.3.7 -->
   	<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
   	<!-- Font Awesome -->
@@ -31,9 +36,6 @@
   	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   	<![endif]-->
-
-  	<!-- Google Font -->
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
   	<style type="text/css">
   		.mt20{
@@ -73,4 +75,5 @@
         border-radius: 5px;
       }
   	</style>
+  <link rel="stylesheet" href="../dist/css/ems.css?v=<?php echo filemtime(__DIR__.'/../../dist/css/ems.css'); ?>">
 </head>

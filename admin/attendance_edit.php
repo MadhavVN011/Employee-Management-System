@@ -1,61 +1,33 @@
 <?php
-	include 'includes/session.php';
-
-	if(isset($_POST['edit'])){
-		$id = $_POST['id'];
-		$date = $_POST['edit_date'];
-		$time_in = $_POST['edit_time_in'];
-		$time_in = date('H:i:s', strtotime($time_in));
-		$time_out = $_POST['edit_time_out'];
-		$time_out = date('H:i:s', strtotime($time_out));
-
-		$sql = "UPDATE attendance SET date = '$date', time_in = '$time_in', time_out = '$time_out' WHERE id = '$id'";
-		if($conn->query($sql)){
-			$_SESSION['success'] = 'Attendance updated successfully';
-
-			$sql = "SELECT * FROM attendance WHERE id = '$id'";
-			$query = $conn->query($sql);
-			$row = $query->fetch_assoc();
-			$emp = $row['employee_id'];
-
-			$sql = "SELECT * FROM employees LEFT JOIN schedules ON schedules.id=employees.schedule_id WHERE employees.id = '$emp'";
-			$query = $conn->query($sql);
-			$srow = $query->fetch_assoc();
-
-			//updates
-			$logstatus = ($time_in > $srow['time_in']) ? 0 : 1;
-			//
-
-			if($srow['time_in'] > $time_in){
-				$time_in = $srow['time_in'];
-			}
-
-			if($srow['time_out'] < $time_out){
-				$time_out = $srow['time_out'];
-			}
-
-			$time_in = new DateTime($time_in);
-			$time_out = new DateTime($time_out);
-			$interval = $time_in->diff($time_out);
-			$hrs = $interval->format('%h');
-			$mins = $interval->format('%i');
-			$mins = $mins/60;
-			$int = $hrs + $mins;
-			if($int > 4){
-				$int = $int - 1;
-			}
-
-			$sql = "UPDATE attendance SET num_hr = '$int', status = '$logstatus' WHERE id = '$id'";
-			$conn->query($sql);
-		}
-		else{
-			$_SESSION['error'] = $conn->error;
-		}
-	}
-	else{
-		$_SESSION['error'] = 'Fill up edit form first';
-	}
-
-	header('location:attendance.php');
-
-?>
+require 'includes/session.php';
+require_once '../attendance_functions.php';
+try {
+    if (!isset($_POST['edit'])) {
+        throw new InvalidArgumentException('Fill up edit form first');
+    }
+    $id = $_POST['id'] ?? '';
+    $date = attendance_date($_POST['edit_date'] ?? '');
+    $time_in = attendance_time($_POST['edit_time_in'] ?? '');
+    $time_out = attendance_time($_POST['edit_time_out'] ?? '');
+    if ($time_out < $time_in) {
+        throw new InvalidArgumentException('Time out must be after time in.');
+    }
+    $shift = db_query($conn, 'SELECT schedules.*, attendance.employee_id FROM attendance JOIN employees ON employees.id = attendance.employee_id JOIN schedules ON schedules.id = employees.schedule_id WHERE attendance.id = ?', array($id))->fetch_assoc();
+    if (!$shift) {
+        throw new InvalidArgumentException('Attendance or assigned schedule not found.');
+    }
+    if (db_query($conn, 'SELECT id FROM attendance WHERE employee_id = ? AND date = ? AND id <> ?', array($shift['employee_id'], $date, $id))->num_rows) {
+        throw new InvalidArgumentException('Employee attendance for the day exists');
+    }
+    $hours = attendance_hours($time_in, $time_out, $shift['time_in'], $shift['time_out']);
+    db_query($conn, 'UPDATE attendance SET date = ?, time_in = ?, time_out = ?, status = ?, num_hr = ? WHERE id = ?',
+        array($date, $time_in, $time_out, $time_in <= $shift['time_in'] ? 1 : 0, $hours, $id));
+    $_SESSION['success'] = 'Attendance updated successfully';
+} catch (InvalidArgumentException $error) {
+    $_SESSION['error'] = $error->getMessage();
+} catch (mysqli_sql_exception $error) {
+    error_log($error->getMessage());
+    $_SESSION['error'] = 'Unable to update attendance. Please check the details.';
+}
+header('Location: attendance.php');
+exit;

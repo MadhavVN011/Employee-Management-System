@@ -3,8 +3,8 @@
 
 	if(isset($_POST['delete'])){
 		$id = $_POST['id'];
-		$sql = "DELETE FROM cashadvance WHERE id = '$id'";
-		if($conn->query($sql)){
+		$sql = 'DELETE FROM cashadvance WHERE id = ?';
+		if(db_query($conn, $sql, array($id))){
 			$_SESSION['success'] = 'Cash advance deleted successfully';
 		}
 		else{

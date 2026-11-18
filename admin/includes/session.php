@@ -1,13 +1,13 @@
 <?php
-	session_start();
-	include 'includes/conn.php';
-
-	if(!isset($_SESSION['admin']) || trim($_SESSION['admin']) == ''){
-		header('location: index.php');
-	}
-
-	$sql = "SELECT * FROM admin WHERE id = '".$_SESSION['admin']."'";
-	$query = $conn->query($sql);
-	$user = $query->fetch_assoc();
-	
-?>
+session_start();
+if (empty($_SESSION['admin']) || !ctype_digit((string) $_SESSION['admin'])) {
+    header('Location: index.php');
+    exit;
+}
+require_once __DIR__.'/conn.php';
+$user = db_query($conn, 'SELECT * FROM admin WHERE id = ?', array($_SESSION['admin']))->fetch_assoc();
+if (!$user) {
+    unset($_SESSION['admin']);
+    header('Location: index.php');
+    exit;
+}

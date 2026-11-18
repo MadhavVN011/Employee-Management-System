@@ -10,9 +10,9 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-        Overtime
-      </h1>
+      <div class="page-eyebrow">PEOPLE OPERATIONS</div>
+      <h1>Overtime</h1>
+      <p class="page-description">Keep track of the extra time your team puts in.</p>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li>Employees</li>
@@ -27,7 +27,7 @@
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-warning'></i> Error!</h4>
-              ".$_SESSION['error']."
+              ".h($_SESSION['error'])."
             </div>
           ";
           unset($_SESSION['error']);
@@ -37,7 +37,7 @@
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-check'></i> Success!</h4>
-              ".$_SESSION['success']."
+              ".h($_SESSION['success'])."
             </div>
           ";
           unset($_SESSION['success']);
@@ -47,6 +47,7 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
+              <h3 class="box-title">Overtime entries</h3>
               <a href="#addnew" data-toggle="modal" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> New</a>
             </div>
             <div class="box-body">
@@ -69,8 +70,8 @@
                         <tr>
                           <td class='hidden'></td>
                           <td>".date('M d, Y', strtotime($row['date_overtime']))."</td>
-                          <td>".$row['empid']."</td>
-                          <td>".$row['firstname'].' '.$row['lastname']."</td>
+                          <td>".h($row['empid'])."</td>
+                          <td>".h($row['firstname']).' '.h($row['lastname'])."</td>
                           <td>".$row['hours']."</td>
                           <td>".$row['rate']."</td>
                           <td>
@@ -118,16 +119,14 @@ function getRow(id){
     data: {id:id},
     dataType: 'json',
     success: function(response){
-      var time = response.hours;
-      var split = time.split('.');
-      var hour = split[0];
-      var min = '.'+split[1];
-      min = min * 60;
+      var time = Number(response.hours) || 0;
+      var hour = Math.floor(time);
+      var min = Math.round((time - hour) * 60);
       console.log(min);
-      $('.employee_name').html(response.firstname+' '+response.lastname);
+      $('.employee_name').text(response.firstname+' '+response.lastname);
       $('.otid').val(response.otid);
       $('#datepicker_edit').val(response.date_overtime);
-      $('#overtime_date').html(response.date_overtime);
+      $('#overtime_date').text(response.date_overtime);
       $('#hours_edit').val(hour);
       $('#mins_edit').val(min);
       $('#rate_edit').val(response.rate);

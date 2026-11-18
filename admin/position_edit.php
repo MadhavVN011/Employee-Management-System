@@ -6,8 +6,8 @@
 		$title = $_POST['title'];
 		$rate = $_POST['rate'];
 
-		$sql = "UPDATE position SET description = '$title', rate = '$rate' WHERE id = '$id'";
-		if($conn->query($sql)){
+		$sql = 'UPDATE position SET description = ?, rate = ? WHERE id = ?';
+		if(db_query($conn, $sql, array($title, $rate, $id))){
 			$_SESSION['success'] = 'Position updated successfully';
 		}
 		else{

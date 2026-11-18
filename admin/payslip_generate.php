@@ -1,18 +1,16 @@
 <?php
 	include 'includes/session.php';
+	require_once __DIR__.'/includes/payroll_functions.php';
 	
-	$range = $_POST['date_range'];
-	$ex = explode(' - ', $range);
-	$from = date('Y-m-d', strtotime($ex[0]));
-	$to = date('Y-m-d', strtotime($ex[1]));
-
-	$sql = "SELECT *, SUM(amount) as total_amount FROM deductions";
-    $query = $conn->query($sql);
-   	$drow = $query->fetch_assoc();
-    $deduction = $drow['total_amount'];
-
-	$from_title = date('M d, Y', strtotime($ex[0]));
-	$to_title = date('M d, Y', strtotime($ex[1]));
+	try {
+		list($from, $to) = payroll_range($_POST['date_range'] ?? '');
+	} catch (InvalidArgumentException $error) {
+		http_response_code(400);
+		header('Content-Type: text/plain; charset=utf-8');
+		exit($error->getMessage());
+	}
+	$from_title = date('M d, Y', strtotime($from));
+	$to_title = date('M d, Y', strtotime($to));
 
 	require_once('../tcpdf/tcpdf.php');  
     $pdf = new TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);  
@@ -31,21 +29,10 @@
     $pdf->AddPage(); 
     $contents = '';
 
-	$sql = "SELECT *, SUM(num_hr) AS total_hr, attendance.employee_id AS empid, employees.employee_id AS employee FROM attendance LEFT JOIN employees ON employees.id=attendance.employee_id LEFT JOIN position ON position.id=employees.position_id WHERE date BETWEEN '$from' AND '$to' GROUP BY attendance.employee_id ORDER BY employees.lastname ASC, employees.firstname ASC";
-
-	$query = $conn->query($sql);
-	while($row = $query->fetch_assoc()){
-		$empid = $row['empid'];
-                      
-      	$casql = "SELECT *, SUM(amount) AS cashamount FROM cashadvance WHERE employee_id='$empid' AND date_advance BETWEEN '$from' AND '$to'";
-      
-      	$caquery = $conn->query($casql);
-      	$carow = $caquery->fetch_assoc();
-      	$cashadvance = $carow['cashamount'];
-
-		$gross = $row['rate'] * $row['total_hr'];
-		$total_deduction = $deduction + $cashadvance;
-  		$net = $gross - $total_deduction;
+	foreach (payroll_rows($conn, $from, $to) as $row) {
+		$deduction = $row['deduction'];
+		$cashadvance = $row['cashadvance'];
+		$net = $row['net'];
 
 		$contents .= '
 			<h2 align="center">Teelaunch - EMS</h2>
@@ -53,22 +40,27 @@
 			<table cellspacing="0" cellpadding="3">  
     	       	<tr>  
             		<td width="25%" align="right">Employee Name: </td>
-                 	<td width="25%"><b>'.$row['firstname']." ".$row['lastname'].'</b></td>
+                    <td width="25%"><b>'.h($row['firstname'])." ".h($row['lastname']).'</b></td>
 				 	<td width="25%" align="right">Rate per Hour: </td>
                  	<td width="25%" align="right">'.number_format($row['rate'], 2).'</td>
     	    	</tr>
     	    	<tr>
     	    		<td width="25%" align="right">Employee ID: </td>
-				 	<td width="25%">'.$row['employee'].'</td>   
+                    <td width="25%">'.h($row['employee_id']).'</td>
 				 	<td width="25%" align="right">Total Hours: </td>
 				 	<td width="25%" align="right">'.number_format($row['total_hr'], 2).'</td> 
     	    	</tr>
     	    	<tr> 
     	    		<td></td> 
     	    		<td></td>
-				 	<td width="25%" align="right"><b>Gross Pay: </b></td>
-				 	<td width="25%" align="right"><b>'.number_format(($row['rate']*$row['total_hr']), 2).'</b></td> 
+                    <td width="25%" align="right"><b>Gross Pay (incl. overtime): </b></td>
+                    <td width="25%" align="right"><b>'.number_format($row['gross'], 2).'</b></td>
     	    	</tr>
+                <tr>
+                    <td></td><td></td>
+                    <td width="25%" align="right">Overtime Pay: </td>
+                    <td width="25%" align="right">'.number_format($row['overtime_pay'], 2).'</td>
+                </tr>
     	    	<tr> 
     	    		<td></td> 
     	    		<td></td>
@@ -85,7 +77,7 @@
     	    		<td></td> 
     	    		<td></td>
 				 	<td width="25%" align="right"><b>Total Deduction:</b></td>
-				 	<td width="25%" align="right"><b>'.number_format($total_deduction, 2).'</b></td> 
+                    <td width="25%" align="right"><b>'.number_format($row['total_deduction'], 2).'</b></td>
     	    	</tr>
     	    	<tr> 
     	    		<td></td> 

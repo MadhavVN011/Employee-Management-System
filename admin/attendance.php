@@ -10,9 +10,9 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-        Attendance
-      </h1>
+      <div class="page-eyebrow">PEOPLE OPERATIONS</div>
+      <h1>Attendance</h1>
+      <p class="page-description">Every check-in, check-out, and workday in one place.</p>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Attendance</li>
@@ -26,7 +26,7 @@
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-warning'></i> Error!</h4>
-              ".$_SESSION['error']."
+              ".h($_SESSION['error'])."
             </div>
           ";
           unset($_SESSION['error']);
@@ -36,7 +36,7 @@
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-check'></i> Success!</h4>
-              ".$_SESSION['success']."
+              ".h($_SESSION['success'])."
             </div>
           ";
           unset($_SESSION['success']);
@@ -46,6 +46,7 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
+              <h3 class="box-title">Attendance log</h3>
               <a href="#addnew" data-toggle="modal" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> New</a>
             </div>
             <div class="box-body">
@@ -69,8 +70,8 @@
                         <tr>
                           <td class='hidden'></td>
                           <td>".date('M d, Y', strtotime($row['date']))."</td>
-                          <td>".$row['empid']."</td>
-                          <td>".$row['firstname'].' '.$row['lastname']."</td>
+                          <td>".h($row['empid'])."</td>
+                          <td>".h($row['firstname']).' '.h($row['lastname'])."</td>
                           <td>".date('h:i A', strtotime($row['time_in'])).$status."</td>
                           <td>".date('h:i A', strtotime($row['time_out']))."</td>
                           <td>
@@ -119,13 +120,13 @@ function getRow(id){
     dataType: 'json',
     success: function(response){
       $('#datepicker_edit').val(response.date);
-      $('#attendance_date').html(response.date);
+      $('#attendance_date').text(response.date);
       $('#edit_time_in').val(response.time_in);
       $('#edit_time_out').val(response.time_out);
       $('#attid').val(response.attid);
-      $('#employee_name').html(response.firstname+' '+response.lastname);
+      $('#employee_name').text(response.firstname+' '+response.lastname);
       $('#del_attid').val(response.attid);
-      $('#del_employee_name').html(response.firstname+' '+response.lastname);
+      $('#del_employee_name').text(response.firstname+' '+response.lastname);
     }
   });
 }

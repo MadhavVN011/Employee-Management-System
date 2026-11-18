@@ -1,42 +1,31 @@
 <?php
-	include 'includes/session.php';
-
-	if(isset($_POST['add'])){
-		$firstname = $_POST['firstname'];
-		$lastname = $_POST['lastname'];
-		$address = $_POST['address'];
-		$birthdate = $_POST['birthdate'];
-		$contact = $_POST['contact'];
-		$gender = $_POST['gender'];
-		$position = $_POST['position'];
-		$schedule = $_POST['schedule'];
-		$filename = $_FILES['photo']['name'];
-		if(!empty($filename)){
-			move_uploaded_file($_FILES['photo']['tmp_name'], '../images/'.$filename);	
-		}
-		//creating employeeid
-		$letters = '';
-		$numbers = '';
-		foreach (range('A', 'Z') as $char) {
-		    $letters .= $char;
-		}
-		for($i = 0; $i < 10; $i++){
-			$numbers .= $i;
-		}
-		$employee_id = substr(str_shuffle($letters), 0, 3).substr(str_shuffle($numbers), 0, 9);
-		//
-		$sql = "INSERT INTO employees (employee_id, firstname, lastname, address, birthdate, contact_info, gender, position_id, schedule_id, photo, created_on) VALUES ('$employee_id', '$firstname', '$lastname', '$address', '$birthdate', '$contact', '$gender', '$position', '$schedule', '$filename', NOW())";
-		if($conn->query($sql)){
-			$_SESSION['success'] = 'Employee added successfully';
-		}
-		else{
-			$_SESSION['error'] = $conn->error;
-		}
-
-	}
-	else{
-		$_SESSION['error'] = 'Fill up add form first';
-	}
-
-	header('location: employee.php');
-?>
+require 'includes/session.php';
+require_once __DIR__.'/includes/photo.php';
+require_once __DIR__.'/includes/assignment_functions.php';
+$filename = null;
+try {
+    if (!isset($_POST['add'])) {
+        throw new InvalidArgumentException('Fill up add form first');
+    }
+    $fields = employee_fields($_POST);
+    $conn->begin_transaction();
+    lock_assignment($conn, 'position', $fields['position']);
+    lock_assignment($conn, 'schedules', $fields['schedule']);
+    $filename = store_photo($_FILES['photo'] ?? null);
+    $employee_id = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 3).substr(str_shuffle('0123456789'), 0, 9);
+    db_query($conn, 'INSERT INTO employees (employee_id, firstname, lastname, address, birthdate, contact_info, gender, position_id, schedule_id, photo, created_on) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())',
+        array($employee_id, $fields['firstname'], $fields['lastname'], $fields['address'], $fields['birthdate'], $fields['contact'], $fields['gender'], $fields['position'], $fields['schedule'], $filename ?? ''));
+    $conn->commit();
+    $_SESSION['success'] = 'Employee added successfully';
+} catch (InvalidArgumentException $error) {
+    $conn->rollback();
+    discard_photo($filename);
+    $_SESSION['error'] = $error->getMessage();
+} catch (mysqli_sql_exception $error) {
+    $conn->rollback();
+    discard_photo($filename);
+    error_log($error->getMessage());
+    $_SESSION['error'] = 'Unable to add the employee. Please check the details.';
+}
+header('Location: employee.php');
+exit;

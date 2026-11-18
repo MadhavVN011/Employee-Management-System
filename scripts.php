@@ -4,3 +4,5 @@
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- Moment JS -->
 <script src="bower_components/moment/moment.js"></script>
+
+<script src="dist/js/ems-ui.js?v=<?php echo filemtime(__DIR__.'/dist/js/ems-ui.js'); ?>"></script>

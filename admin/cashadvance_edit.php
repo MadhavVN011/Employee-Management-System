@@ -5,8 +5,8 @@
 		$id = $_POST['id'];
 		$amount = $_POST['amount'];
 		
-		$sql = "UPDATE cashadvance SET amount = '$amount' WHERE id = '$id'";
-		if($conn->query($sql)){
+		$sql = 'UPDATE cashadvance SET amount = ? WHERE id = ?';
+		if(db_query($conn, $sql, array($amount, $id))){
 			$_SESSION['success'] = 'Cash advance updated successfully';
 		}
 		else{

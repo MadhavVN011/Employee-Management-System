@@ -6,8 +6,8 @@
 		$description = $_POST['description'];
 		$amount = $_POST['amount'];
 
-		$sql = "UPDATE deductions SET description = '$description', amount = '$amount' WHERE id = '$id'";
-		if($conn->query($sql)){
+		$sql = 'UPDATE deductions SET description = ?, amount = ? WHERE id = ?';
+		if(db_query($conn, $sql, array($description, $amount, $id))){
 			$_SESSION['success'] = 'Deduction updated successfully';
 		}
 		else{

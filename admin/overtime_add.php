@@ -1,32 +1,26 @@
 <?php
-	include 'includes/session.php';
-
-	if(isset($_POST['add'])){
-		$employee = $_POST['employee'];
-		$date = $_POST['date'];
-		$hours = $_POST['hours'] + ($_POST['mins']/60);
-		$rate = $_POST['rate'];
-		$sql = "SELECT * FROM employees WHERE employee_id = '$employee'";
-		$query = $conn->query($sql);
-		if($query->num_rows < 1){
-			$_SESSION['error'] = 'Employee not found';
-		}
-		else{
-			$row = $query->fetch_assoc();
-			$employee_id = $row['id'];
-			$sql = "INSERT INTO overtime (employee_id, date_overtime, hours, rate) VALUES ('$employee_id', '$date', '$hours', '$rate')";
-			if($conn->query($sql)){
-				$_SESSION['success'] = 'Overtime added successfully';
-			}
-			else{
-				$_SESSION['error'] = $conn->error;
-			}
-		}
-	}	
-	else{
-		$_SESSION['error'] = 'Fill up add form first';
-	}
-
-	header('location: overtime.php');
-
-?>
+require 'includes/session.php';
+require_once __DIR__.'/includes/overtime_functions.php';
+try {
+    if (!isset($_POST['add'])) {
+        throw new InvalidArgumentException('Fill up add form first');
+    }
+    list($date, $hours, $rate) = overtime_values($_POST);
+    $employee_id = $_POST['employee'] ?? '';
+    if (!is_string($employee_id)) {
+        throw new InvalidArgumentException('Employee not found');
+    }
+    $employee = db_query($conn, 'SELECT id FROM employees WHERE employee_id = ?', array($employee_id))->fetch_assoc();
+    if (!$employee) {
+        throw new InvalidArgumentException('Employee not found');
+    }
+    db_query($conn, 'INSERT INTO overtime (employee_id, date_overtime, hours, rate) VALUES (?, ?, ?, ?)', array($employee['id'], $date, $hours, $rate));
+    $_SESSION['success'] = 'Overtime added successfully';
+} catch (InvalidArgumentException $error) {
+    $_SESSION['error'] = $error->getMessage();
+} catch (mysqli_sql_exception $error) {
+    error_log($error->getMessage());
+    $_SESSION['error'] = 'Unable to add overtime. Please check the details.';
+}
+header('Location: overtime.php');
+exit;

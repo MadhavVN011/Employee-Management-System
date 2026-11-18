@@ -8,40 +8,40 @@
             	<h4 class="modal-title"><b>Admin Profile</b></h4>
           	</div>
           	<div class="modal-body">
-            	<form class="form-horizontal" method="POST" action="profile_update.php?return=<?php echo basename($_SERVER['PHP_SELF']); ?>" enctype="multipart/form-data">
+                <form class="form-horizontal" method="POST" action="profile_update.php?return=<?php echo h(basename($_SERVER['PHP_SELF'])); ?>" enctype="multipart/form-data">
           		  <div class="form-group">
                   	<label for="username" class="col-sm-3 control-label">Username</label>
 
                   	<div class="col-sm-9">
-                    	<input type="text" class="form-control" id="username" name="username" value="<?php echo $user['username']; ?>">
+                        <input type="text" class="form-control" id="username" name="username" value="<?php echo h($user['username']); ?>">
                   	</div>
                 </div>
                 <div class="form-group">
                     <label for="password" class="col-sm-3 control-label">Password</label>
 
                     <div class="col-sm-9"> 
-                      <input type="password" class="form-control" id="password" name="password" value="<?php echo $user['password']; ?>">
+                      <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" placeholder="Leave blank to keep current password">
                     </div>
                 </div>
                 <div class="form-group">
                   	<label for="firstname" class="col-sm-3 control-label">Firstname</label>
 
                   	<div class="col-sm-9">
-                    	<input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $user['firstname']; ?>">
+                        <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo h($user['firstname']); ?>">
                   	</div>
                 </div>
                 <div class="form-group">
                   	<label for="lastname" class="col-sm-3 control-label">Lastname</label>
 
                   	<div class="col-sm-9">
-                    	<input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $user['lastname']; ?>">
+                        <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo h($user['lastname']); ?>">
                   	</div>
                 </div>
                 <div class="form-group">
                     <label for="photo" class="col-sm-3 control-label">Photo:</label>
 
                     <div class="col-sm-9">
-                      <input type="file" id="photo" name="photo">
+                      <input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/gif,image/webp">
                     </div>
                 </div>
                 <hr>

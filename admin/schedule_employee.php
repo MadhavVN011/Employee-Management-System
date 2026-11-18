@@ -10,9 +10,9 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-        Schedules
-      </h1>
+      <div class="page-eyebrow">PEOPLE OPERATIONS</div>
+      <h1>Team schedules</h1>
+      <p class="page-description">The right people, on the right schedule.</p>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li>Employees</li>
@@ -27,7 +27,7 @@
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-warning'></i> Error!</h4>
-              ".$_SESSION['error']."
+              ".h($_SESSION['error'])."
             </div>
           ";
           unset($_SESSION['error']);
@@ -37,7 +37,7 @@
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-check'></i> Success!</h4>
-              ".$_SESSION['success']."
+              ".h($_SESSION['success'])."
             </div>
           ";
           unset($_SESSION['success']);
@@ -47,6 +47,7 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
+              <h3 class="box-title">Team schedules</h3>
               <a href="schedule_print.php" class="btn btn-success btn-sm btn-flat"><span class="glyphicon glyphicon-print"></span> Print</a>
             </div>
             <div class="box-body">
@@ -64,11 +65,11 @@
                     while($row = $query->fetch_assoc()){
                       echo "
                         <tr>
-                          <td>".$row['employee_id']."</td>
-                          <td>".$row['firstname'].' '.$row['lastname']."</td>
+                          <td>".h($row['employee_id'])."</td>
+                          <td>".h($row['firstname']).' '.h($row['lastname'])."</td>
                           <td>".date('h:i A', strtotime($row['time_in'])).' - '.date('h:i A', strtotime($row['time_out']))."</td>
                           <td>
-                            <button class='btn btn-success btn-sm edit btn-flat' data-id='".$row['empid']."'><i class='fa fa-edit'></i> Edit</button>
+                            <button class='btn btn-success btn-sm edit btn-flat' data-id='".h($row['empid'])."'><i class='fa fa-edit'></i> Edit</button>
                           </td>
                         </tr>
                       ";
@@ -104,9 +105,9 @@ function getRow(id){
     data: {id:id},
     dataType: 'json',
     success: function(response){
-      $('.employee_name').html(response.firstname+' '+response.lastname);
+      $('.employee_name').text(response.firstname+' '+response.lastname);
       $('#schedule_val').val(response.schedule_id);
-      $('#schedule_val').html(response.time_in+' '+response.time_out);
+      $('#schedule_val').text(response.time_in+' '+response.time_out);
       $('#empid').val(response.empid);
     }
   });

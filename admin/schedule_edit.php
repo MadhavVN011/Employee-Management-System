@@ -8,8 +8,8 @@
 		$time_out = $_POST['time_out'];
 		$time_out = date('H:i:s', strtotime($time_out));
 
-		$sql = "UPDATE schedules SET time_in = '$time_in', time_out = '$time_out' WHERE id = '$id'";
-		if($conn->query($sql)){
+		$sql = 'UPDATE schedules SET time_in = ?, time_out = ? WHERE id = ?';
+		if(db_query($conn, $sql, array($time_in, $time_out, $id))){
 			$_SESSION['success'] = 'Schedule updated successfully';
 		}
 		else{

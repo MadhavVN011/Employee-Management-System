@@ -10,9 +10,9 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-        Schedules
-      </h1>
+      <div class="page-eyebrow">PEOPLE OPERATIONS</div>
+      <h1>Work schedules</h1>
+      <p class="page-description">Build a rhythm that works for your team.</p>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li>Employees</li>
@@ -27,7 +27,7 @@
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-warning'></i> Error!</h4>
-              ".$_SESSION['error']."
+              ".h($_SESSION['error'])."
             </div>
           ";
           unset($_SESSION['error']);
@@ -37,7 +37,7 @@
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-check'></i> Success!</h4>
-              ".$_SESSION['success']."
+              ".h($_SESSION['success'])."
             </div>
           ";
           unset($_SESSION['success']);
@@ -47,6 +47,7 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
+              <h3 class="box-title">Work schedules</h3>
               <a href="#addnew" data-toggle="modal" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> New</a>
             </div>
             <div class="box-body">
@@ -114,7 +115,7 @@ function getRow(id){
       $('#edit_time_in').val(response.time_in);
       $('#edit_time_out').val(response.time_out);
       $('#del_timeid').val(response.id);
-      $('#del_schedule').html(response.time_in+' - '+response.time_out);
+      $('#del_schedule').text(response.time_in+' - '+response.time_out);
     }
   });
 }

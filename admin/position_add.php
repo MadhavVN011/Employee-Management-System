@@ -5,8 +5,8 @@
 		$title = $_POST['title'];
 		$rate = $_POST['rate'];
 
-		$sql = "INSERT INTO position (description, rate) VALUES ('$title', '$rate')";
-		if($conn->query($sql)){
+		$sql = 'INSERT INTO position (description, rate) VALUES (?, ?)';
+		if(db_query($conn, $sql, array($title, $rate))){
 			$_SESSION['success'] = 'Position added successfully';
 		}
 		else{

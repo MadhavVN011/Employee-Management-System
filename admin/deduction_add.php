@@ -5,8 +5,8 @@
 		$description = $_POST['description'];
 		$amount = $_POST['amount'];
 
-		$sql = "INSERT INTO deductions (description, amount) VALUES ('$description', '$amount')";
-		if($conn->query($sql)){
+		$sql = 'INSERT INTO deductions (description, amount) VALUES (?, ?)';
+		if(db_query($conn, $sql, array($description, $amount))){
 			$_SESSION['success'] = 'Deduction added successfully';
 		}
 		else{

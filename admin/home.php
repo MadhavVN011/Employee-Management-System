@@ -4,7 +4,7 @@
   $today = date('Y-m-d');
   $year = date('Y');
   if(isset($_GET['year'])){
-    $year = $_GET['year'];
+    $year = (int) $_GET['year'];
   }
 ?>
 <?php include 'includes/header.php'; ?>
@@ -18,9 +18,9 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-        Dashboard
-      </h1>
+      <div class="page-eyebrow">YOUR WORKSPACE</div>
+      <h1>Your team, at a glance.</h1>
+      <p class="page-description">Welcome back, <?php echo h($user['firstname']); ?>. Here's a little clarity for your workday.</p>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Dashboard</li>
@@ -35,7 +35,7 @@
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-warning'></i> Error!</h4>
-              ".$_SESSION['error']."
+              ".h($_SESSION['error'])."
             </div>
           ";
           unset($_SESSION['error']);
@@ -45,14 +45,14 @@
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-check'></i> Success!</h4>
-              ".$_SESSION['success']."
+              ".h($_SESSION['success'])."
             </div>
           ";
           unset($_SESSION['success']);
         }
       ?>
       <!-- Small boxes (Stat box) -->
-      <div class="row">
+      <div class="row stats-grid">
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
           <div class="small-box bg-aqua">
@@ -69,7 +69,7 @@
             <div class="icon">
               <i class="ion ion-person-stalker"></i>
             </div>
-            <a href="employee.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="employee.php" class="small-box-footer">View employees <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -86,7 +86,7 @@
                 $query = $conn->query($sql);
                 $early = $query->num_rows;
                 
-                $percentage = ($early/$total)*100;
+                $percentage = $total > 0 ? ($early/$total)*100 : 0;
 
                 echo "<h3>".number_format($percentage, 2)."<sup style='font-size: 20px'>%</sup></h3>";
               ?>
@@ -96,7 +96,7 @@
             <div class="icon">
               <i class="ion ion-pie-graph"></i>
             </div>
-            <a href="attendance.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="attendance.php" class="small-box-footer">Explore attendance <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -116,7 +116,7 @@
             <div class="icon">
               <i class="ion ion-clock"></i>
             </div>
-            <a href="attendance.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="attendance.php" class="small-box-footer">View today's attendance <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -136,21 +136,21 @@
             <div class="icon">
               <i class="ion ion-alert-circled"></i>
             </div>
-            <a href="attendance.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="attendance.php" class="small-box-footer">Review late arrivals <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
           </div>
         </div>
         <!-- ./col -->
       </div>
       <!-- /.row -->
-      <div class="row">
-        <div class="col-xs-12">
+      <div class="row dashboard-bottom">
+        <div class="col-lg-8 col-md-8">
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">Monthly Attendance Report</h3>
+              <div><h3 class="box-title">Attendance overview</h3><p class="box-subtitle">Every arrival tells a part of the story.</p></div>
               <div class="box-tools pull-right">
                 <form class="form-inline">
                   <div class="form-group">
-                    <label>Select Year: </label>
+                    <label for="select_year">Year</label>
                     <select class="form-control input-sm" id="select_year">
                       <?php
                         for($i=2015; $i<=2065; $i++){
@@ -167,12 +167,23 @@
             </div>
             <div class="box-body">
               <div class="chart">
-                <br>
-                <div id="legend" class="text-center"></div>
-                <canvas id="barChart" style="height:350px"></canvas>
+                <div id="legend" class="chart-legend"></div>
+                <canvas id="barChart" style="height:270px" aria-label="Monthly on-time and late attendance" role="img"></canvas>
+                <div id="chart-empty" hidden><span class="empty-chart-icon"><i class="fa fa-bar-chart" aria-hidden="true"></i></span><strong>A fresh page for <?php echo h($year); ?>.</strong><p>No attendance recorded for this year yet.<br>Check back as your team checks in, or choose another year.</p></div>
               </div>
             </div>
           </div>
+        </div>
+        <div class="col-lg-4 col-md-4">
+          <div class="box quick-card">
+            <div class="page-eyebrow">A LITTLE LESS ADMIN</div>
+            <h3>Make room for<br>the work that matters.</h3>
+            <p>Your everyday essentials, right here.</p>
+            <a href="employee.php" class="quick-link"><i class="fa fa-user-o" aria-hidden="true"></i><span><strong>Your people</strong><small>Meet and manage your team</small></span><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+            <a href="attendance.php" class="quick-link"><i class="fa fa-calendar-check-o" aria-hidden="true"></i><span><strong>Time, well tracked</strong><small>Review employee attendance</small></span><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+            <a href="payroll.php" class="quick-link"><i class="fa fa-credit-card" aria-hidden="true"></i><span><strong>Payroll, made clear</strong><small>Review pay and generate reports</small></span><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+          </div>
+          <div class="workspace-tip"><i class="fa fa-leaf" aria-hidden="true"></i><div><strong>A little planning goes a long way.</strong><p>Keep your team's schedules up to date for more accurate attendance and payroll.</p></div></div>
         </div>
       </div>
 
@@ -220,16 +231,16 @@ $(function(){
     datasets: [
       {
         label               : 'Late',
-        fillColor           : 'rgba(210, 214, 222, 1)',
-        strokeColor         : 'rgba(210, 214, 222, 1)',
-        pointColor          : 'rgba(210, 214, 222, 1)',
+        fillColor           : 'rgba(218, 174, 145, 0.85)',
+        strokeColor         : 'rgba(218, 174, 145, 0.85)',
+        pointColor          : 'rgba(218, 174, 145, 0.85)',
         pointStrokeColor    : '#c1c7d1',
         pointHighlightFill  : '#fff',
         pointHighlightStroke: 'rgba(220,220,220,1)',
         data                : <?php echo $late; ?>
       },
       {
-        label               : 'Ontime',
+        label               : 'On time',
         fillColor           : 'rgba(60,141,188,0.9)',
         strokeColor         : 'rgba(60,141,188,0.8)',
         pointColor          : '#3b8bba',
@@ -240,9 +251,9 @@ $(function(){
       }
     ]
   }
-  barChartData.datasets[1].fillColor   = '#00a65a'
-  barChartData.datasets[1].strokeColor = '#00a65a'
-  barChartData.datasets[1].pointColor  = '#00a65a'
+  barChartData.datasets[1].fillColor   = '#79966b'
+  barChartData.datasets[1].strokeColor = '#79966b'
+  barChartData.datasets[1].pointColor  = '#79966b'
   var barChartOptions                  = {
     //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
     scaleBeginAtZero        : true,
@@ -268,12 +279,19 @@ $(function(){
     legendTemplate          : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
     //Boolean - whether to make the chart responsive
     responsive              : true,
-    maintainAspectRatio     : true
+    maintainAspectRatio     : false
   }
 
   barChartOptions.datasetFill = false
   var myChart = barChart.Bar(barChartData, barChartOptions)
   document.getElementById('legend').innerHTML = myChart.generateLegend();
+  var hasAttendance = barChartData.datasets.some(function (dataset) {
+    return dataset.data.some(function (count) { return count > 0; });
+  });
+  if (!hasAttendance) {
+    $('#barChart, #legend').hide();
+    $('#chart-empty').prop('hidden', false);
+  }
 });
 </script>
 <script>
