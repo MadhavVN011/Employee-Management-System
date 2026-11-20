@@ -225,7 +225,6 @@
 <script>
 $(function(){
   var barChartCanvas = $('#barChart').get(0).getContext('2d')
-  var barChart = new Chart(barChartCanvas)
   var barChartData = {
     labels  : <?php echo $months; ?>,
     datasets: [
@@ -283,11 +282,24 @@ $(function(){
   }
 
   barChartOptions.datasetFill = false
-  var myChart = barChart.Bar(barChartData, barChartOptions)
-  document.getElementById('legend').innerHTML = myChart.generateLegend();
   var hasAttendance = barChartData.datasets.some(function (dataset) {
     return dataset.data.some(function (count) { return count > 0; });
   });
+  var myChart;
+  function renderChartTheme() {
+    if (!hasAttendance) return;
+    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (myChart) myChart.destroy();
+    barChartOptions.scaleFontColor = dark ? '#b4c2ad' : '#63725b';
+    barChartOptions.scaleGridLineColor = dark ? 'rgba(195,215,184,.12)' : 'rgba(0,0,0,.05)';
+    barChartOptions.scaleLineColor = barChartOptions.scaleGridLineColor;
+    barChartOptions.animation = false;
+    barChartData.datasets[1].fillColor = barChartData.datasets[1].strokeColor = dark ? '#a1c58e' : '#79966b';
+    myChart = new Chart(barChartCanvas).Bar(barChartData, barChartOptions);
+    document.getElementById('legend').innerHTML = myChart.generateLegend();
+  }
+  renderChartTheme();
+  document.addEventListener('ems:themechange', renderChartTheme);
   if (!hasAttendance) {
     $('#barChart, #legend').hide();
     $('#chart-empty').prop('hidden', false);

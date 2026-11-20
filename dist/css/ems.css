@@ -25,3 +25,182 @@ body.ems-auth{background:#f6f7f2;min-height:100vh}.auth-layout{display:grid;grid
 .table td>.photo{float:none!important;display:inline-block;margin:0 0 0 10px;vertical-align:middle}
 @media(max-width:767px){.skin-blue .main-header .navbar .navbar-custom-menu{position:absolute;top:0;right:0}.navbar-custom-menu>.navbar-nav{margin:0}.navbar-custom-menu .navbar-nav>li{float:left}.navbar-custom-menu .nav>li>a .user-image{display:block}}
 @media(max-width:767px){.skin-blue .main-header .navbar{width:calc(100% - 148px)}}
+
+/* Theme controls remain available on entry screens and in the workspace header. */
+:root{color-scheme:light}
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-width:38px;min-height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--white);color:var(--ink);font-size:11px;cursor:pointer}
+.theme-toggle:hover{background:var(--sage);color:var(--forest-dark)}
+.theme-toggle .fa{font-size:16px;width:17px;text-align:center}
+.skin-blue .navbar-custom-menu{display:flex;align-items:center}
+.navbar-custom-menu .theme-toggle{margin:0 8px;padding:8px 10px;flex-shrink:0}
+.navbar-custom-menu .theme-toggle span{display:none}
+.auth-theme-control{position:absolute;right:26px;top:57px}
+@media(max-width:767px){.auth-theme-control{top:66px}.navbar-custom-menu .theme-toggle{margin:0 4px;min-width:36px;padding:8px}}
+
+/* Sage accents and layered forest surfaces for dark mode. */
+:root[data-theme=dark]{color-scheme:dark;--ink:#e3ebdd;--muted:#a9b5a2;--forest:#a9cc9b;--forest-dark:#c2dfb7;--sage:#334735;--paper:#151d18;--line:#3b493e;--white:#202c25;--surface-soft:#26342a;--surface-hover:#2e3e31}
+:root[data-theme=dark] body,
+:root[data-theme=dark] body.ems-auth{background:var(--paper);color:var(--ink)}
+:root[data-theme=dark] .brand-mark{background:#3e6042;color:#e2f1d5}
+:root[data-theme=dark] .skin-blue .main-header .logo,
+:root[data-theme=dark] .skin-blue .main-header .logo:hover,
+:root[data-theme=dark] .skin-blue .main-header .navbar,
+:root[data-theme=dark] .skin-blue .main-sidebar,
+:root[data-theme=dark] .box,
+:root[data-theme=dark] .modal-content,
+:root[data-theme=dark] .dropdown-menu{background:var(--white);color:var(--ink);border-color:var(--line)}
+:root[data-theme=dark] .skin-blue .main-header .navbar .sidebar-toggle,
+:root[data-theme=dark] .workspace-context,
+:root[data-theme=dark] .workspace-context strong,
+:root[data-theme=dark] .skin-blue .sidebar a,
+:root[data-theme=dark] .sidebar-menu>li>a>.fa,
+:root[data-theme=dark] .skin-blue .sidebar-menu>li.header,
+:root[data-theme=dark] .portal-shortcut,
+:root[data-theme=dark] .page-eyebrow,
+:root[data-theme=dark] .content-header>.breadcrumb,
+:root[data-theme=dark] .content-header>.breadcrumb a,
+:root[data-theme=dark] .main-footer,
+:root[data-theme=dark] .main-footer a,
+:root[data-theme=dark] .main-footer .footer-brand{color:var(--muted)}
+:root[data-theme=dark] .skin-blue .sidebar-menu>li:hover>a,
+:root[data-theme=dark] .skin-blue .main-header .navbar .sidebar-toggle:hover,
+:root[data-theme=dark] .skin-blue .main-header .navbar .nav>li>a:hover,
+:root[data-theme=dark] .skin-blue .main-header .navbar .nav>.open>a{background:var(--surface-hover);color:var(--ink)}
+:root[data-theme=dark] .skin-blue .sidebar-menu>li.active>a{background:var(--sage);color:#d4ebc5}
+:root[data-theme=dark] .sidebar-menu>li.active>a>.fa{color:#b9d99d}
+:root[data-theme=dark] .workspace-badge,
+:root[data-theme=dark] .box-header.with-border,
+:root[data-theme=dark] .quick-link,
+:root[data-theme=dark] .table-bordered,
+:root[data-theme=dark] .table-bordered>thead>tr>th,
+:root[data-theme=dark] .table-bordered>thead>tr>td,
+:root[data-theme=dark] .table-bordered>tbody>tr>td,
+:root[data-theme=dark] .table>tbody>tr>td{border-color:var(--line)}
+:root[data-theme=dark] .box-header{color:var(--ink)}
+:root[data-theme=dark] .workspace-badge>span,
+:root[data-theme=dark] .sidebar-note,
+:root[data-theme=dark] .quick-link>.fa:first-child,
+:root[data-theme=dark] #chart-empty .empty-chart-icon,
+:root[data-theme=dark] .modal-header,
+:root[data-theme=dark] .modal-footer,
+:root[data-theme=dark] .navbar-nav>.user-menu>.dropdown-menu>.user-footer{background:var(--surface-soft);color:var(--muted)}
+:root[data-theme=dark] .navbar-nav>.user-menu>.dropdown-menu>li.user-header{background:#31513d}
+:root[data-theme=dark] .navbar-nav>.user-menu .user-image,
+:root[data-theme=dark] .table td img{border-color:var(--line)}
+:root[data-theme=dark] .small-box.bg-aqua,
+:root[data-theme=dark] .small-box.bg-green,
+:root[data-theme=dark] .small-box.bg-yellow,
+:root[data-theme=dark] .small-box.bg-red{background:var(--white)!important;color:var(--ink)!important}
+:root[data-theme=dark] .small-box>.small-box-footer{background:var(--white);color:var(--forest);border-color:var(--line)}
+:root[data-theme=dark] .small-box>.small-box-footer:hover{background:var(--surface-hover)}
+:root[data-theme=dark] .small-box .icon{background:#34472e;color:#b6d397}
+:root[data-theme=dark] .small-box.bg-green .icon{background:#2c4738;color:#a3ceb6}
+:root[data-theme=dark] .small-box.bg-yellow .icon{background:#463e29;color:#e1c88f}
+:root[data-theme=dark] .small-box.bg-red .icon{background:#49352e;color:#e2b099}
+:root[data-theme=dark] .page-description,
+:root[data-theme=dark] .small-box p,
+:root[data-theme=dark] .chart-legend li,
+:root[data-theme=dark] #chart-empty p,
+:root[data-theme=dark] .quick-card>p,
+:root[data-theme=dark] .quick-link small,
+:root[data-theme=dark] .box-header .form-inline label,
+:root[data-theme=dark] .control-label,
+:root[data-theme=dark] .auth-form label,
+:root[data-theme=dark] .auth-intro,
+:root[data-theme=dark] .auth-help,
+:root[data-theme=dark] .auth-switch,
+:root[data-theme=dark] .auth-nav{color:var(--muted)}
+:root[data-theme=dark] .quick-link strong{color:var(--ink)}
+:root[data-theme=dark] .workspace-tip{background:#2d402c;border-color:#43573c}
+:root[data-theme=dark] .workspace-tip p{color:#b4c6a5}
+:root[data-theme=dark] .workspace-tip>.fa,
+:root[data-theme=dark] .auth-switch a,
+:root[data-theme=dark] .password-toggle{color:var(--forest)}
+:root[data-theme=dark] .auth-divider{background:var(--line)}
+:root[data-theme=dark] .auth-story{background:#233f30}
+:root[data-theme=dark] .art-dot{background:#233f30}
+:root[data-theme=dark] .form-control,
+:root[data-theme=dark] .auth-form .form-control,
+:root[data-theme=dark] .dataTables_length select.form-control,
+:root[data-theme=dark] .dataTables_filter input.form-control,
+:root[data-theme=dark] .bootstrap-timepicker-widget input,
+:root[data-theme=dark] .daterangepicker .input-mini,
+:root[data-theme=dark] .daterangepicker select{background:#19241d;border-color:var(--line);color:var(--ink)}
+:root[data-theme=dark] .form-control::placeholder,
+:root[data-theme=dark] .auth-form .form-control::placeholder{color:#9aa991}
+:root[data-theme=dark] .form-control:focus{border-color:#a9c68e;box-shadow:0 0 0 3px #a5ba8429}
+:root[data-theme=dark] .input-group-addon,
+:root[data-theme=dark] input[type=file]::file-selector-button{background:var(--surface-soft);border-color:var(--line);color:var(--forest)}
+:root[data-theme=dark] .btn-primary,
+:root[data-theme=dark] .btn-success{background:#a1c58e;border-color:#a1c58e;color:#14220f}
+:root[data-theme=dark] .btn-primary:hover,
+:root[data-theme=dark] .btn-primary:focus,
+:root[data-theme=dark] .btn-primary:active,
+:root[data-theme=dark] .btn-success:hover,
+:root[data-theme=dark] .btn-success:focus{background:#b6d5a4;border-color:#b6d5a4;color:#14220f}
+:root[data-theme=dark] .btn-default{background:var(--surface-soft);color:var(--ink);border-color:var(--line)}
+:root[data-theme=dark] .btn-default:hover,
+:root[data-theme=dark] .btn-default:focus,
+:root[data-theme=dark] .password-toggle:hover{background:var(--surface-hover);color:var(--ink);border-color:#63755b}
+:root[data-theme=dark] .btn-danger{background:#88483f;border-color:#b5776a;color:#fff0eb}
+:root[data-theme=dark] .btn-danger:hover{background:#a4594e}
+:root[data-theme=dark] .table .btn-success{background:#2d432c;color:#c0dea9;border-color:#49613d}
+:root[data-theme=dark] .table .btn-success:hover{background:#3b5536}
+:root[data-theme=dark] .table .btn-danger{background:#472f28;color:#f0b4a1;border-color:#68463a}
+:root[data-theme=dark] .table .btn-danger:hover{background:#593c32}
+:root[data-theme=dark] .label-warning,
+:root[data-theme=dark] .alert-success{background:#2b4029!important;color:#c3e2af!important;border-color:#4c6741!important}
+:root[data-theme=dark] .label-danger,
+:root[data-theme=dark] .alert-danger,
+:root[data-theme=dark] .callout.callout-danger{background:#432e28!important;color:#f0b9a7!important;border-color:#68463a!important}
+:root[data-theme=dark] .table-scroll{border-color:var(--line)}
+:root[data-theme=dark] .table>thead>tr>th{background:var(--surface-soft);color:#bac9ae;border-bottom-color:var(--line)!important}
+:root[data-theme=dark] .table>tbody>tr>td{color:#d1deca}
+:root[data-theme=dark] .table-striped>tbody>tr:nth-of-type(odd){background:#233027}
+:root[data-theme=dark] .table>tbody>tr:hover>td{background:var(--surface-hover)}
+:root[data-theme=dark] .table td .photo{color:var(--forest)}
+:root[data-theme=dark] .dataTables_length label,
+:root[data-theme=dark] .dataTables_filter label,
+:root[data-theme=dark] .dataTables_info{color:var(--muted)}
+:root[data-theme=dark] .pagination>li>a,
+:root[data-theme=dark] .pagination>li>span{background:var(--white);color:#c0cfb4}
+:root[data-theme=dark] .pagination>.active>a,
+:root[data-theme=dark] .pagination>.active>a:hover,
+:root[data-theme=dark] .pagination>.active>a:focus,
+:root[data-theme=dark] .pagination>li>a:hover{background:var(--sage);color:#dbedcb}
+:root[data-theme=dark] .pagination>.disabled>a{background:transparent;color:#8f9c87}
+:root[data-theme=dark] .modal .close{color:var(--ink);opacity:.8;text-shadow:none}
+:root[data-theme=dark] .modal-backdrop.in{opacity:.65}
+:root[data-theme=dark] .datepicker,
+:root[data-theme=dark] .daterangepicker,
+:root[data-theme=dark] .daterangepicker .calendar-table,
+:root[data-theme=dark] .daterangepicker td.off,
+:root[data-theme=dark] .daterangepicker td.off.in-range,
+:root[data-theme=dark] .daterangepicker td.off.start-date,
+:root[data-theme=dark] .daterangepicker td.off.end-date{background:var(--white);color:var(--ink);border-color:var(--line)}
+:root[data-theme=dark] .datepicker table tr td.old,
+:root[data-theme=dark] .datepicker table tr td.new,
+:root[data-theme=dark] .daterangepicker td.off,
+:root[data-theme=dark] .daterangepicker td.disabled{color:#95a48b}
+:root[data-theme=dark] .datepicker table tr td.day:hover,
+:root[data-theme=dark] .datepicker table tr td span:hover,
+:root[data-theme=dark] .datepicker .datepicker-switch:hover,
+:root[data-theme=dark] .datepicker .prev:hover,
+:root[data-theme=dark] .datepicker .next:hover,
+:root[data-theme=dark] .datepicker tfoot tr th:hover,
+:root[data-theme=dark] .daterangepicker td.available:hover,
+:root[data-theme=dark] .daterangepicker th.available:hover,
+:root[data-theme=dark] .bootstrap-timepicker-widget table td a:hover{background:var(--surface-hover);color:var(--ink)}
+:root[data-theme=dark] .datepicker table tr td.today,
+:root[data-theme=dark] .daterangepicker td.in-range{background:var(--sage)!important;color:var(--ink)}
+:root[data-theme=dark] .datepicker table tr td.active.active,
+:root[data-theme=dark] .datepicker table tr td span.active.active,
+:root[data-theme=dark] .daterangepicker td.active,
+:root[data-theme=dark] .daterangepicker td.active:hover,
+:root[data-theme=dark] .daterangepicker .ranges li.active{background:#a1c58e!important;color:#14220f;border-color:#a1c58e}
+:root[data-theme=dark] .daterangepicker .ranges li{background:var(--surface-soft);color:var(--ink);border-color:var(--line)}
+:root[data-theme=dark] .daterangepicker .ranges li:hover{background:var(--sage);border-color:var(--line)}
+:root[data-theme=dark] .daterangepicker .daterangepicker_input i{color:var(--muted)}
+:root[data-theme=dark] .bootstrap-timepicker-widget table td a{color:var(--forest)}
+:root[data-theme=dark] .dropdown-menu:after,
+:root[data-theme=dark] .daterangepicker:after{border-bottom-color:var(--white)}
