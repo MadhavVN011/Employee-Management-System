@@ -15,6 +15,7 @@ include 'includes/header.php';
     <div class="auth-story-footer"><span>People. Time. A better workday.</span><i class="fa fa-leaf" aria-hidden="true"></i></div>
   </section>
   <main class="auth-form-panel">
+    <div class="auth-theme-control"><?php include __DIR__.'/../theme_toggle.php'; ?></div>
     <a href="../index.php" class="auth-nav">Employee portal <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
     <a href="../index.php" class="portal-mobile-brand brand-lockup" aria-label="EMS attendance portal"><span class="brand-mark"><i class="fa fa-th-large" aria-hidden="true"></i></span><span class="brand-name">EMS<em>.</em></span></a>
     <div class="auth-card">

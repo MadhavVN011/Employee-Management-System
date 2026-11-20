@@ -10,6 +10,7 @@
     <div class="auth-story-footer"><span>Small moments. Good work.</span><i class="fa fa-sun-o" aria-hidden="true"></i></div>
   </section>
   <main class="auth-form-panel">
+    <div class="auth-theme-control"><?php include __DIR__.'/theme_toggle.php'; ?></div>
     <a href="admin/" class="auth-nav">Admin workspace <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
     <a href="index.php" class="portal-mobile-brand brand-lockup" aria-label="EMS attendance portal"><span class="brand-mark"><i class="fa fa-th-large" aria-hidden="true"></i></span><span class="brand-name">EMS<em>.</em></span></a>
     <div class="auth-card">

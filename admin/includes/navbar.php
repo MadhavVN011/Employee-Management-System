@@ -7,6 +7,7 @@
     <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button" aria-label="Toggle navigation"><span class="sr-only">Toggle navigation</span></a>
     <div class="workspace-context"><span>Workspace</span><i class="fa fa-angle-right" aria-hidden="true"></i><strong><?php echo h($ems_page_title ?? 'Overview'); ?></strong></div>
     <div class="navbar-custom-menu">
+      <?php include __DIR__.'/../../theme_toggle.php'; ?>
       <a href="../index.php" class="portal-shortcut pull-left"><i class="fa fa-clock-o" aria-hidden="true"></i> Attendance portal <i class="fa fa-arrow-up" style="transform:rotate(45deg);font-size:9px" aria-hidden="true"></i></a>
       <ul class="nav navbar-nav">
         <li class="dropdown user user-menu">

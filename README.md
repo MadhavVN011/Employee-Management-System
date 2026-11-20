@@ -7,6 +7,7 @@ A comprehensive, PHP-based Employee Management System designed to help you effic
 This system comes packed with features to streamline your HR processes:
 
 - **Dual Interfaces:** Separate, dedicated panels for Administrators and Employees.
+- **Light and Dark Mode:** Use the sun/moon toggle on any page. Your choice is saved in your browser and shared between the employee portal and admin workspace. The initial theme follows your device preference.
 - **Employee Management:** Easily add, edit, view, and remove employee records.
 - **Attendance Tracking:** Monitor employee check-in and check-out times. Employees can log attendance using their Employee ID or by scanning a unique QR code.
 - **Payroll Management:**

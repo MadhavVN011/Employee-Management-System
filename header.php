@@ -7,6 +7,7 @@
     <title>Your workday · EMS</title>
   	<!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1" name="viewport">
+    <script src="dist/js/ems-theme.js?v=<?php echo filemtime(__DIR__.'/dist/js/ems-theme.js'); ?>"></script>
   	<!-- Bootstrap 3.3.7 -->
   	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   	<!-- Font Awesome -->
